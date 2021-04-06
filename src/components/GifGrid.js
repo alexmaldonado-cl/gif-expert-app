@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
+import { GifGridItem } from './GifGridItem';
 
 export const GifGrid = ({category}) => {
 
-
+    const [images, setImages] = useState([]);
 
     const getGifs = async() => {
         const url = 'https://api.giphy.com/v1/gifs/search?q=Breaking+Bad&limit=10&api_key=AuM6sBkHBFyrIz0MfFenRSEN8eEfzhuP';
@@ -14,11 +15,12 @@ export const GifGrid = ({category}) => {
             return {
                 id: img.id,
                 title: img.title,
-                img: img.images?.downsized_medium.url
+                url: img.images?.downsized_medium.url
             }
         });
 
-        console.log(gifs);
+        setImages(gifs);
+
         
     };
 
@@ -29,6 +31,16 @@ export const GifGrid = ({category}) => {
     return (
         <>
            <h3>{category}</h3> 
+           
+               {
+                   images.map(image => {
+                       return <GifGridItem
+                        key={image.id}
+                        {...image} 
+                       />
+                   })
+               }
+           
         </>
     );
 };
